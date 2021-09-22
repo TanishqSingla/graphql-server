@@ -2,38 +2,38 @@ const { ApolloServer } = require("apollo-server");
 const fs = require("fs");
 const path = require("path");
 
-// dummy data
-const links = [
-  {
-    id: "link-0",
-    description: "This is the first feed on codernews",
-    url: "localhost:4000/post",
-  },
-];
+const {PrismaClient} = require('@prisma/client');
 
+const prisma = new PrismaClient();
+
+// dummy data
 const resolvers = {
   Query: {
     info: () => `This is the api of codernews`,
-    feed: () => links,
+    feed: async (parent, args, context, info) => {
+        return context.prisma.link.findMany()
+    },
   },
   Mutation: {
-    post: (parent, args) => {
-      let idCount = links.length;
+      post: (parent, args, context, info) => {
+          const newLink = context.prisma.link.create({
+              data: {
+                  url: args.url,
+                  description: args.description
+              }
+          })
 
-      const link = {
-        id: `link-${idCount++}`,
-        description: args.description,
-        url: args.url,
-      };
-      links.push(link);
-      return link;
-    },
+          return newLink
+      }
   },
 };
 
 const server = new ApolloServer({
   typeDefs: fs.readFileSync(path.join(__dirname, "schema.gql"), "utf8"),
   resolvers,
+  context: {
+      prisma
+  }
 });
 
 server.listen().then(({ url }) => console.log(`Server is running at ${url}`));
