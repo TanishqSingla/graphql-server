@@ -10,12 +10,12 @@ const prisma = new PrismaClient();
 const resolvers = {
   Query: {
     info: () => `This is the api of codernews`,
-    feed: async (parent, args, context, info) => {
+    feed: async (_parent, _args, context, _info) => {
         return context.prisma.link.findMany()
     },
   },
   Mutation: {
-      post: (parent, args, context, info) => {
+      post: (_parent, args, context, _info) => {
           const newLink = context.prisma.link.create({
               data: {
                   url: args.url,
