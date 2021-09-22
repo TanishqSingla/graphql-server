@@ -14,10 +14,18 @@ const resolvers = {
         info: () => `This is the api of codernews`,
         feed: () => links
     },
-    Link: {
-        id: (parent) => parent.id,
-        description: (parent) => parent.description,
-        url: (parent) => parent.url
+    Mutation: {
+        post: (parent, args) => {
+            let idCount = links.length
+
+            const link = {
+                id: `link-${idCount++}`,
+                description: args.description,
+                url: args.url
+            }
+            links.push(links)
+            return link
+        }
     }
 }
 
