@@ -3,8 +3,23 @@ type Query {
   feed: [Link!]!
 }
 
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+  links: [Link!]!
+}
+
 type Mutation {
   post(url: String!, description: String!): Link!
+  signup(email: String!, password: String!): AuthPayload
+  login(email: String!, password: String!): AuthPayload
 }
 
 type Link {
