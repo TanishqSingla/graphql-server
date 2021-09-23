@@ -4,6 +4,5 @@ function postedBy(parent, args, context) {
 
 
 module.exports = {
-    feed,
     postedBy
 }

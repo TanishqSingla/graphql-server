@@ -5,29 +5,15 @@ const path = require("path");
 const { PrismaClient } = require("@prisma/client");
 const { getUserId } = require("./utils");
 
+const Query = require("./resolvers/Query");
+const Link = require("./resolvers/Link");
+const User = require("./resolvers/User");
+const Mutation = require("./resolvers/Mutation");
+
+
 const prisma = new PrismaClient();
 
-// dummy data
-const resolvers = {
-  Query: {
-    info: () => `This is the api of codernews`,
-    feed: async (_parent, _args, context, _info) => {
-      return context.prisma.link.findMany();
-    },
-  },
-  Mutation: {
-    post: (_parent, args, context, _info) => {
-      const newLink = context.prisma.link.create({
-        data: {
-          url: args.url,
-          description: args.description,
-        },
-      });
-
-      return newLink;
-    },
-  },
-};
+const resolvers = { Query, Link, User, Mutation };
 
 const server = new ApolloServer({
   typeDefs: fs.readFileSync(path.join(__dirname, "schema.gql"), "utf8"),
@@ -36,7 +22,7 @@ const server = new ApolloServer({
     return {
       ...req,
       prisma,
-      userId: req && req.header.authorization ? getUserId(req) : null,
+      userId: req && req.headers.authorization ? getUserId(req) : null,
     };
   },
 });
