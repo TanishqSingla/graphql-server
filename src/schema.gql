@@ -29,6 +29,12 @@ type Link {
   postedBy: User
 }
 
+type Vote {
+  id: ID!
+  link: Link!
+  user: User!
+}
+
 type Subscription {
   newLink: Link
 }
