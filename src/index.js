@@ -12,12 +12,13 @@ const Link = require("./resolvers/Link");
 const User = require("./resolvers/User");
 const Mutation = require("./resolvers/Mutation");
 const Subscription = require("./resolvers/Subscription");
+const Vote = require('./resolvers/Vote');
 
 const prisma = new PrismaClient();
 
 const pubsub = new PubSub();
 
-const resolvers = { Query, Link, User, Mutation, Subscription };
+const resolvers = { Query, Link, User, Mutation, Subscription, Vote };
 
 const server = new ApolloServer({
   typeDefs: fs.readFileSync(path.join(__dirname, "schema.gql"), "utf8"),
